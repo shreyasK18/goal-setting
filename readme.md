@@ -77,4 +77,4 @@ goal-setter/
 - **Frontend:** http://localhost:3000
 - **Backend API:** http://localhost:2000
 
-https://mernappbrad.herokuapp.com/
+
