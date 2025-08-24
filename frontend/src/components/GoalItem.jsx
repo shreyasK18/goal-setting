@@ -85,7 +85,7 @@ function GoalItem({ goal }) {
             {showDetails ? '▼' : '▶'}
           </button>
           <button 
-            onClick={() => dispatch(deleteGoal(goal._id))} 
+            onClick={() => {dispatch(deleteGoal(goal._id))}} 
             className='btn-delete'
           >
             ×

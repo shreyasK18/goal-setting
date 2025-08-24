@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState,useLayoutEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import GoalForm from '../components/GoalForm'
 import GoalItem from '../components/GoalItem'
 import Spinner from '../components/Spinner'
-import { getGoals, getGoalStats, reset } from '../features/goals/goalSlice'
+import { getGoals, getGoalStats, reset, resetSuccess } from '../features/goals/goalSlice'
 
 function Dashboard() {
   const navigate = useNavigate()
@@ -17,7 +17,7 @@ function Dashboard() {
   })
 
   const { user } = useSelector((state) => state.auth)
-  const { goals, stats, isLoading, isError, message } = useSelector(
+  const { goals, stats, isLoading, isError, message, isSuccess } = useSelector(
     (state) => state.goals
   )
 
@@ -41,6 +41,17 @@ function Dashboard() {
   useEffect(() => {
     dispatch(getGoals(filters))
   }, [filters, dispatch])
+
+  // Refresh stats when a goal is successfully created
+  useLayoutEffect(() => {
+    console.log("Create Form Called")
+    if (isSuccess) {
+      console.log("Create Form Called on Success")
+      dispatch(getGoalStats())
+      // Reset the success state to allow future triggers
+      dispatch(resetSuccess())
+    }
+  }, [isSuccess, dispatch])
 
   const handleFilterChange = (filterType, value) => {
     setFilters(prev => ({

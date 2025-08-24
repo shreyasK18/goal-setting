@@ -209,6 +209,11 @@ export const goalSlice = createSlice({
     clearCurrentGoal: (state) => {
       state.currentGoal = null
     },
+    resetSuccess: (state) => {
+      state.isSuccess = false
+      state.isError = false
+      state.message = ''
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -326,5 +331,5 @@ export const goalSlice = createSlice({
   },
 })
 
-export const { reset, clearCurrentGoal } = goalSlice.actions
+export const { reset, clearCurrentGoal, resetSuccess } = goalSlice.actions
 export default goalSlice.reducer
