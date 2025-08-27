@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const cors = require('cors');
 const colors = require('colors');
 const dotenv = require('dotenv').config({ path: '../.env' });
 const { errorHandler } = require('./middleware/errorMiddleware');
@@ -10,24 +11,29 @@ connectDB();
 
 const app = express();
 
+// CORS configuration for separate frontend/backend deployments
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/api/goals', require('./routes/goalRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
 
-// Serve frontend
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../frontend/build')));
-
-  app.get('*', (req, res) =>
-    res.sendFile(
-      path.resolve(__dirname, '../', 'frontend', 'build', 'index.html')
-    )
-  );
-} else {
-  app.get('/', (req, res) => res.send('Please set to production'));
-}
+// API status endpoint
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'Goal Setter API is running!', 
+    version: '1.0.0',
+    endpoints: {
+      goals: '/api/goals',
+      users: '/api/users'
+    }
+  });
+});
 
 app.use(errorHandler);
 
