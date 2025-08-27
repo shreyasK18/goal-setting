@@ -5,7 +5,10 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "build": "npm run build:clean && npm run build:copy",
+    "build:clean": "rm -rf build",
+    "build:copy": "mkdir -p build && cp -r *.js config controllers middleware models routes build/ && cp package*.json build/"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
